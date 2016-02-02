@@ -1,0 +1,32 @@
+{
+  "name": "earthworm",
+  "version": "1.0.0",
+  "description": "easily create crawlers based on self-replicated scrapers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lulurun/earthworm.git"
+  },
+  "keywords": [
+    "crawler",
+    "scraper",
+    "web",
+    "scraping",
+    "crawling"
+  ],
+  "author": "lulurun@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lulurun/earthworm/issues"
+  },
+  "homepage": "https://github.com/lulurun/earthworm#readme",
+  "dependencies": {
+    "async": "^1.5.2",
+    "cheerio": "^0.20.0",
+    "log4js": "^0.6.31",
+    "request": "^2.69.0"
+  }
+}
