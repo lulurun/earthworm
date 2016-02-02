@@ -1,6 +1,6 @@
 {
   "name": "earthworm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "easily create crawlers based on self-replicated scrapers",
   "main": "index.js",
   "scripts": {
