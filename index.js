@@ -5,30 +5,38 @@ var request = require('request');
 var EventEmitter = require('events');
 var util = require('util');
 
+var emitter = new EventEmitter();
+exports.emitItem = function(item, scraper) {
+  emitter.emit("item", item, scraper);
+};
+
+exports.emitScraper = function(scraper) {
+  emitter.emit("scraper", scraper);
+};
+
+exports.onItem = function(cb) {
+  emitter.on("item", cb);
+};
+
 var Scraper = exports.Scraper = (function(){
   var logger = log4js.getLogger("scraper");
 
   var Class = function (url){
     this.url = url;
-    EventEmitter.call(this);
-    this.on("item", this.pipe.bind(this));
   };
-  util.inherits(Class, EventEmitter);
+
   var proto = Class.prototype;
 
   proto.run = function(cb) {
     var self = this;
+    var scrapers = [];
     self.get(function($){
       self.scrape($, cb);
     });
   };
 
   proto.scrape = function($, cb) {
-    this.emit("item", "default scraper called");
-  };
-
-  proto.pipe = function(item) {
-    console.log("got item:", item);
+    worm.emitItem("default scraper called");
   };
 
   proto.get = function(cb){
@@ -49,19 +57,16 @@ var Scraper = exports.Scraper = (function(){
 
 exports.crawl = function(scraper, concurrency, cb) {
   var q = async.queue(function(scraper, cb) {
-    scraper.run(function(scrapers){
-      if (scrapers && scrapers.length) {
-        scrapers.forEach(function(s){
-          q.push(s);
-        });
-        cb();
-      } else {
-        cb();
-      }
+    scraper.run(function(){
+      cb();
     });
   }, concurrency);
 
   q.drain = cb;
+  emitter.on("scraper", function(scraper){
+    q.push(scraper);
+  });
+
   q.push(scraper);
 };
 
