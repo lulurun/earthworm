@@ -5,7 +5,7 @@ var request = require('request');
 var EventEmitter = require('events');
 var util = require('util');
 
-exports.Scraper = (function(){
+var Scraper = exports.Scraper = (function(){
   var logger = log4js.getLogger("scraper");
 
   var Class = function (url){
@@ -64,4 +64,28 @@ exports.crawl = function(scraper, concurrency, cb) {
   q.drain = cb;
   q.push(scraper);
 };
+
+exports.defineScraper = function(object, base) {
+  if (!base) base = Scraper;
+  var Class = function(){
+    var url = arguments[0];
+    var args = [];
+    for(var i=0; i<arguments.length; i++) {
+      args.push(arguments[i]);
+    }
+    if (object.init) {
+      object.init.apply(this, args);
+    }
+    base.call(this, url);
+  };
+  util.inherits(Class, base);
+
+  for (var k in object) {
+    if (k !== "init" && typeof(object[k]) === "function") {
+      Class.prototype[k] = object[k];
+    }
+  }
+
+  return Class;
+}
 
