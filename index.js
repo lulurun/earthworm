@@ -5,38 +5,35 @@ var request = require('request');
 var EventEmitter = require('events');
 var util = require('util');
 
-var emitter = new EventEmitter();
-exports.emitItem = function(item, scraper) {
-  emitter.emit("item", item, scraper);
-};
-
-exports.emitScraper = function(scraper) {
-  emitter.emit("scraper", scraper);
-};
-
-exports.onItem = function(cb) {
-  emitter.on("item", cb);
-};
+var logger = log4js.getLogger("earthworm");
 
 var Scraper = exports.Scraper = (function(){
-  var logger = log4js.getLogger("scraper");
-
   var Class = function (url){
     this.url = url;
+    EventEmitter.call(this);
   };
+  util.inherits(Class, EventEmitter);
 
   var proto = Class.prototype;
 
   proto.run = function(cb) {
     var self = this;
-    var scrapers = [];
     self.get(function($){
       self.scrape($, cb);
     });
   };
 
+  proto.emitItem = function(item) {
+    this.emit("item", item, this);
+  };
+
+  proto.emitScraper = function(scraper) {
+    this.emit("scraper", scraper);
+  };
+
   proto.scrape = function($, cb) {
-    worm.emitItem("default scraper called");
+    logger.error("scrape method is to be implemented in sub classes");
+    cb();
   };
 
   proto.get = function(cb){
@@ -55,19 +52,22 @@ var Scraper = exports.Scraper = (function(){
   return Class;
 })();
 
-exports.crawl = function(scraper, concurrency, cb) {
+exports.crawl = function(scraper, concurrency, onItem, onDone) {
   var q = async.queue(function(scraper, cb) {
-    scraper.run(function(){
-      cb();
-    });
+    scraper.run(cb);
   }, concurrency);
 
-  q.drain = cb;
-  emitter.on("scraper", function(scraper){
-    q.push(scraper);
-  });
+  q.drain = onDone;
 
-  q.push(scraper);
+  var emit = function(scraper) {
+    scraper.on("item", onItem);
+    scraper.on("scraper", function(scraper){
+      emit(scraper);
+    });
+    q.push(scraper);
+  };
+
+  emit(scraper);
 };
 
 exports.defineScraper = function(object, base) {
