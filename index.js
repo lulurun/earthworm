@@ -17,10 +17,9 @@ var Scraper = exports.Scraper = (function(){
   var proto = Class.prototype;
 
   proto.run = function(cb) {
-    var self = this;
-    self.get(function($){
-      self.scrape($, cb);
-    });
+    this.get(function($){
+      this.scrape($, cb);
+    }.bind(this));
   };
 
   proto.emitItem = function(item) {
@@ -37,16 +36,15 @@ var Scraper = exports.Scraper = (function(){
   };
 
   proto.get = function(cb){
-    var url = this.url;
-    logger.debug("getting", url);
-    request(url, function (err, res, body) {
+    logger.debug("getting", this.url);
+    request(this.url, function (err, res, body) {
       if (!err && res.statusCode == 200) {
         cb(cheerio.load(body));
       } else {
         var code = (res && res.statusCode) || "-"
-        logger.error("getting", url, code, err);
+        logger.error("getting", this.url, code, err);
       }
-    });
+    }.bind(this));
   };
 
   return Class;
