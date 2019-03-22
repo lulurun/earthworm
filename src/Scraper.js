@@ -4,11 +4,11 @@ module.exports = class Scraper {
   scrape(content, emitter) {
     throw new Error('You have to implement the method "scrape"!');
     /**
-     * item = parseX(content);
+     * const item = parseForItem(content);
      * emitter.emitItem(item);
      * ...
-     * url = parseY(content);
-     * emitter.emitRunner(url, new ZzzSraper());
+     * const url = parseForNewLink(content);
+     * emitter.emitRunner(url, new SomeSraper());
      */
   }
 };

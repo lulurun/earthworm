@@ -3,6 +3,9 @@
 const url = require('url');
 const { Scraper, crawl } = require('../index');
 
+const baseUrl = 'https://www.google.com';
+const startUrl = `${baseUrl}/search?q=earthworm+github`;
+
 function getUrl(urlStr) {
   const parsedUrl = url.parse(urlStr, true);
   if (parsedUrl.pathname === '/url') {
@@ -23,12 +26,21 @@ class SearchResultScraper extends Scraper {
 
       emitter.emitItem(item);
     });
+
+    if (emitter.getDepth() >= 2) return;
+
+    const nextPage = $('#foot table a').last();
+    const nextPageUrl = baseUrl + nextPage.attr('href');
+    emitter.emitRunner(nextPageUrl, new SearchResultScraper());
   }
 }
 
-crawl('https://www.google.com/search?q=earthworm+github', new SearchResultScraper(),
-  (item, scraperRunner) => {
-    console.log(item, scraperRunner.url, scraperRunner.getDepth());
+let idx = 1;
+
+crawl(startUrl, new SearchResultScraper(),
+  (item /* , scraperRunner */) => {
+    console.log(idx, item.title);
+    idx += 1;
   },
   () => {
     console.log('done');
