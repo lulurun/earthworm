@@ -1,14 +1,15 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-console */
 const { Scraper, crawl } = require('../index');
-const { Dumper } = require('../src/Analysis');
+const { Analysis } = require('../src/Analysis');
 
 const baseUrl = 'https://www.amazon.co.jp';
 const startUrl = `${baseUrl}/b/?node=2386870051`;
 
 class BrowseNodeScraper extends Scraper {
   scrape($, emitter) {
-    new Dumper().dump($('body').get(0));
+    const analysis = new Analysis($('body').get(0));
+    analysis.suggest();
   }
 }
 

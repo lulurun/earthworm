@@ -6,7 +6,7 @@ module.exports = {
   Scraper,
   crawl: (url, scraper, onItem, onDone, concurrency = 1) => {
     const q = async.queue(async runner => runner.run(), concurrency);
-    q.drain = onDone;
+    q.drain = onDone || (() => {});
 
     const start = (runner) => {
       runner.on('item', item => onItem(item, runner));
