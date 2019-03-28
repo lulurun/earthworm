@@ -16,13 +16,13 @@ const { Analysis } = require('../src/Analysis');
 
 class SimpleScraper extends Scraper {
   scrape($ /* , emitter */) {
-    const analysis = new Analysis($('body').get(0));
-    // const results = analysis.suggest(5);
-    // results.forEach((x) => {
-    //   console.log(x.score, x.path, x.els.length);
-    // });
+    const analysis = new Analysis($('body').get(0), 30);
+    const results = analysis.suggest(5);
+    results.forEach((x) => {
+      console.log(x.score, x.path, x.els.length, x.cnt, x.len);
+    });
 
-    analysis.scrape();
+    // analysis.scrape();
   }
 }
 
@@ -31,4 +31,4 @@ if (!url) {
   throw new Error('Usage: node suggest.js $URL');
 }
 
-crawl(url, new SimpleScraper());
+crawl(url, new SimpleScraper(), () => {}, () => {}, { headless: true });

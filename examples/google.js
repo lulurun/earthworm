@@ -1,29 +1,17 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-console */
-const url = require('url');
 const { Scraper, crawl } = require('../index');
 
 const baseUrl = 'https://www.google.com';
-const startUrl = `${baseUrl}/search?q=earthworm+github`;
-
-function getUrl(urlStr) {
-  const parsedUrl = url.parse(urlStr, true);
-  if (parsedUrl.pathname === '/url') {
-    return parsedUrl.query.q;
-  }
-  return null;
-}
+const startUrl = `${baseUrl}/search?q=login`;
 
 class SearchResultScraper extends Scraper {
   scrape($, emitter) {
     $('#search .g').each((i, x) => {
-      const $url = $(x).find('h3 a');
       const item = {
-        title: $url.text(),
-        url: getUrl($url.attr('href')),
-        desc: $(x).find('.st').text(),
+        title: $(x).find('h3').text(),
+        url: $(x).find('cite').text(),
       };
-
       emitter.emitItem(item);
     });
 
@@ -44,4 +32,4 @@ crawl(startUrl, new SearchResultScraper(),
   },
   () => {
     console.log('done');
-  });
+  }, { headless: true });

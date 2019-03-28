@@ -31,6 +31,13 @@ update(/a/g/h/j)
 /a/g/h/j 1 * (2 + 3 + 5 + 7)               = 17
 
 */
+const IGNORE_TAGS = {
+  // select: 1,
+  // form: 1,
+  // header: 1,
+  // footer: 1,
+};
+
 const WEIGHTS = {
   FIBONACCI: [
     1, 1, 2, 3, 5, 8,
@@ -40,9 +47,10 @@ const WEIGHTS = {
   ],
   ACCUMULATED_PRIMES: [
     2, 5, 10, 17, 28,
-    41, 58, 77, 98, 121,
-    150, 181, 218, 259, 306,
-    359,
+    41, 58, 77, 100, 129,
+    160, 197, 238, 281, 328,
+    381, 440, 501, 568, 639,
+    712, 791, 874, 963, 1060,
   ],
 };
 
@@ -51,13 +59,19 @@ function getAttrClass($) {
   return `.${$.attribs.class}`;
 }
 
+function getAttrStyle($) {
+  if (!$.attribs || !$.attribs.style) return '';
+  return `.${$.attribs.style}`;
+}
+
 function getAttrId($) {
   if (!$.attribs || !$.attribs.id) return '';
   return `#${$.attribs.id}`;
 }
 
-function getPathStr($array) {
-  return $array.map(el => `/${el.name}${getAttrClass(el)}`).join('');
+function getKeyStr($array) {
+  // return $array.map(el => `/${el.name}${getAttrClass(el)}`).join('');
+  return $array.map(el => `/${el.name}${getAttrClass(el)}(${getAttrStyle(el)})`).join('');
 }
 
 function getDisplayStr($array) {
@@ -75,12 +89,12 @@ class Analysis {
   update($array) {
     for (let i = 1; i <= $array.length; i += 1) {
       const $prefixArray = $array.slice(0, i);
-      const str = getPathStr($prefixArray);
+      const str = getKeyStr($prefixArray);
       if (!(str in this.histogram)) {
         this.histogram[str] = {
+          display: getDisplayStr($prefixArray),
           cnt: 0,
           len: i,
-          display: getDisplayStr($prefixArray),
           els: [],
         };
       }
@@ -99,6 +113,7 @@ class Analysis {
     if (depth === this.maxDepth) return;
     $.children.forEach((x) => {
       if (x.type === 'text') return;
+      if (x.name in IGNORE_TAGS) return;
       this.stack.push(x);
       this.build(x, depth + 1);
       this.stack.pop();
@@ -110,6 +125,8 @@ class Analysis {
       path: v.display,
       score: v.cnt * WEIGHTS.ACCUMULATED_PRIMES[v.len - 1],
       els: v.els,
+      cnt: v.cnt,
+      len: v.len,
     }));
 
     return results.sort((a, b) => {
@@ -130,7 +147,7 @@ class Analysis {
   dump() {
     Object.keys(this.histogram).sort().forEach((k) => {
       const v = this.histogram[k];
-      console.log(k, v);
+      console.log(k, v.display);
     });
   }
 }
