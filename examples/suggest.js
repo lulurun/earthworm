@@ -1,6 +1,6 @@
 /* eslint-disable class-methods-use-this */
 /*
- * This script can help finding data list from given url
+ * This script can help finding data list from given url.
  * usage:
  * $ node suggest.js ${URL}
  *
@@ -10,12 +10,12 @@
  * 'https://www.amazon.co.jp/b/?node=2386870051'
  */
 
-const { Scraper, crawl } = require('../index');
+const { Scraper, kickoff } = require('../index');
 const { Analysis } = require('../src/Analysis');
 
 
 class SimpleScraper extends Scraper {
-  scrape($ /* , emitter */) {
+  scrape($) {
     const analysis = new Analysis($('body').get(0), 30);
     const results = analysis.suggest(5);
     results.forEach((x) => {
@@ -31,4 +31,4 @@ if (!url) {
   throw new Error('Usage: node suggest.js $URL');
 }
 
-crawl(url, new SimpleScraper(), () => {}, () => {}, { headless: true });
+kickoff(url, new SimpleScraper(), { headless: true });

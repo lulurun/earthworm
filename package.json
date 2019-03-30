@@ -1,28 +1,31 @@
 {
-  "name": "earthworm",
+  "name": "kick-off",
   "version": "1.0.4",
-  "description": "easily create crawlers based on self-replicated scrapers",
+  "description": "make web scraping easy",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lulurun/earthworm.git"
+    "url": "git+https://github.com/lulurun/kick-off.git"
   },
   "keywords": [
     "crawler",
     "scraper",
-    "web",
     "scraping",
-    "crawling"
+    "crawling",
+    "nodejs",
+    "cheerio",
+    "headless",
+    "puppeteer"
   ],
   "author": "lulurun@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lulurun/earthworm/issues"
+    "url": "https://github.com/lulurun/kick-off/issues"
   },
-  "homepage": "https://github.com/lulurun/earthworm#readme",
+  "homepage": "https://github.com/lulurun/kick-off#readme",
   "dependencies": {
     "async": "^2.6.2",
     "cheerio": "^1.0.0-rc.2",

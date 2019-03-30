@@ -32,10 +32,18 @@ update(/a/g/h/j)
 
 */
 const IGNORE_TAGS = {
-  // select: 1,
-  // form: 1,
-  // header: 1,
-  // footer: 1,
+  select: 1,
+  form: 1,
+  header: 1,
+  footer: 1,
+  em: 1,
+  strong: 1,
+  b: 1,
+  hr: 1,
+  br: 1,
+  wbr: 1,
+  i: 1,
+  p: 1,
 };
 
 const WEIGHTS = {

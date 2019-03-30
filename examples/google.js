@@ -1,9 +1,11 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-console */
-const { Scraper, crawl } = require('../index');
+const { Scraper, kickoff } = require('../index');
+
+const keyword = (process.argv.length > 2) ? process.argv[2] : 'github+kick-off';
 
 const baseUrl = 'https://www.google.com';
-const startUrl = `${baseUrl}/search?q=login`;
+const startUrl = `${baseUrl}/search?q=${keyword}`;
 
 class SearchResultScraper extends Scraper {
   scrape($, emitter) {
@@ -25,11 +27,13 @@ class SearchResultScraper extends Scraper {
 
 let idx = 1;
 
-crawl(startUrl, new SearchResultScraper(),
-  (item /* , scraperRunner */) => {
-    console.log(idx, item.title);
-    idx += 1;
+kickoff(
+  startUrl,
+  new SearchResultScraper(),
+  {
+    onItem: (item) => {
+      console.log(idx, item.title, item.url);
+      idx += 1;
+    },
   },
-  () => {
-    console.log('done');
-  }, { headless: true });
+);
