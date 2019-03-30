@@ -1,6 +1,6 @@
-Kick-off is trying to make web scraping easy.
+Kick-off-crawling is trying to make web scraping easy.
 
-Kick-off is made possible by below powerful libraries
+Kick-off-crawling is made possible by below powerful libraries
 * [`request`](https://github.com/request/request), [`request-promise`](https://github.com/request/request-promise) for http request
 * [`puppeteer`](https://github.com/GoogleChrome/puppeteer) for making http request getting js generated html page
 * [`cheerio`](https://github.com/cheeriojs/cheerio) for translating html text to dom objects
@@ -14,7 +14,7 @@ Kick-off is made possible by below powerful libraries
 
 # Overview
 
-Kick-off exposes a `Scraper` class and a `kickoff` function.
+Kick-off-crawling exposes a `Scraper` class and a `kickoff` function.
 
 `Scraper`s are self-managed:
 * scrape data and urls from a given url
@@ -35,7 +35,7 @@ $ node amazon.js
 
 # Usage
 
-_Working example source code: [examples/amazon.js](https://github.com/lulurun/kick-off/blob/master/examples/amazon.js)_
+_Working example source code: [examples/amazon.js](https://github.com/lulurun/kick-off-crawling/blob/master/examples/amazon.js)_
 
 Here is an example for getting app info from Amazon Appstore.
 
