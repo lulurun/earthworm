@@ -27,7 +27,7 @@ module.exports = class ScraperRunner extends EventEmitter {
     this.emit('item', item, this);
   }
 
-  emitRunner(url, scraper) {
+  emitScraper(url, scraper) {
     const runner = new this.constructor(url, scraper, this);
     this.emit('runner', runner);
   }

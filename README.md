@@ -23,16 +23,44 @@ Kick-off exposes a `Scraper` class and a `kickoff` function.
 
 `kickoff` takes start url and scraper, kickoff the crawling process and wait until the work is done.
 
+# Qucik start & Running the Examples
+
+```
+$ cd ${REPO_PATH}
+$ npm install
+$ cd examples
+$ node google.js
+$ node amazon.js
+```
+
 # Usage
 
-Please also have a look at the examples folder
+_Working example source code: [examples/amazon.js](https://github.com/lulurun/kick-off/blob/master/examples/amazon.js)_
 
-### define your scrapers
+Here is an example for getting app info from Amazon Appstore.
+
+### 1. Define your scrapers
+
+We need to define 2 Scrapers for completing the task
+1. `BrowseNodeScraper` for getting list of app detail pages.
+2. `DetailPageScraper` for getting app into (title, stars, version) from each detail page.
+
+##### Scraping app list
+
+```
+class BrowseNodeScraper extends Scraper {
+  scrape($, emitter) {
+    $('#mainResults .s-item-container').slice(0, 5).each((i, x) => {
+      const detailPageUrl = $(x).find('.s-access-detail-page').attr('href');
+      emitter.emitScraper(detailPageUrl, new DetailPageScraper()); // <-- pass scraping job of DetailPage to DetailPageScraper
+    });
+  }
+}
+```
 
 ##### Scraping the detail page
 
 ```
-
 class DetailPageScraper extends Scraper {
   getVersion($) {
     let version = '';
@@ -58,31 +86,22 @@ class DetailPageScraper extends Scraper {
 }
 ```
 
-##### Scraping app list
+### 2. Kick off
 
 ```
-class BrowseNodeScraper extends Scraper {
-  scrape($, emitter) {
-    $('#mainResults .s-item-container').slice(0, 5).each((i, x) => {
-      const detailPageUrl = $(x).find('.s-access-detail-page').attr('href');
-      emitter.emitRunner(detailPageUrl, new DetailPageScraper()); // <-- pass scraping job of DetailPage to DetailPageScraper
-    });
-  }
-}
-```
-
-### Kick off
-
-```
-kickoff(startUrl, new BrowseNodeScraper(), {
-  concurrency: 2, // <-- max 2 requests at a time, default 1
-  headless: false, // <-- set true when scraping js generated page, default false
-  onItem: (item) => { // <-- the item is emitted from scraper
-    console.log(item);
+kickoff(
+  'https://www.amazon.co.jp/b/?node=2386870051',
+  new BrowseNodeScraper(),
+  {
+    concurrency: 2, // <-- max 2 requests at a time, default 1
+    headless: false, // <-- set true when scraping js generated page, default false
+    onItem: (item) => { // <-- the item is emitted from scraper
+      console.log(item);
+    },
+    onDone: () => { // <-- this is called when there is no more scraping task, optional
+      console.log('done');
+    },
   },
-  onDone: () => { // <-- this is called when there is no more scraping task, optional
-    console.log('done');
-  }
-}
+);
 ```
 

@@ -9,10 +9,6 @@ const UA = {
 };
 
 module.exports = class RequestRunner extends ScraperRunner {
-  constructor(url, scraper, parent = null) {
-    super(url, scraper, parent);
-  }
-
   async run() {
     const $ = await rp.get(this.url, {
       headers: {

@@ -2,9 +2,6 @@
 /* eslint-disable no-console */
 const { Scraper, kickoff } = require('../index');
 
-const baseUrl = 'https://www.amazon.co.jp';
-const startUrl = `${baseUrl}/b/?node=2386870051`;
-
 class DetailPageScraper extends Scraper {
   getVersion($) {
     let version = '';
@@ -33,16 +30,16 @@ class BrowseNodeScraper extends Scraper {
   scrape($, emitter) {
     $('#mainResults .s-item-container').slice(0, 5).each((i, x) => {
       const detailPageUrl = $(x).find('.s-access-detail-page').attr('href');
-      emitter.emitRunner(detailPageUrl, new DetailPageScraper());
+      emitter.emitScraper(detailPageUrl, new DetailPageScraper());
     });
   }
 }
 
 kickoff(
-  startUrl,
+  'https://www.amazon.co.jp/b/?node=2386870051',
   new BrowseNodeScraper(),
   {
-    onItem: (item /* , scraperRunner */) => {
+    onItem: (item) => {
       console.log(item);
     },
   },
