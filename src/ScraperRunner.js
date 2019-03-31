@@ -18,7 +18,7 @@ module.exports = class ScraperRunner extends EventEmitter {
   async run() {
     let html = await this.getHtml();
     if (Config.minifyHtml) {
-      html = minify(html);
+      html = minify(html, Config.minifyOpts);
     }
     const $ = cheerio.load(html);
     return this.scraper.scrape($, this);

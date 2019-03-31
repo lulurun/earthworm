@@ -1,7 +1,7 @@
 const minifyOpts = {
-  collapseWhitepsace: true,
+  collapseWhitespace: true,
   removeComments: true,
-  removeTagWhitespace: true,
+  removeEmptyElements: true,
 };
 
 const config = {
