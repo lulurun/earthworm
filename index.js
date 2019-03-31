@@ -2,12 +2,14 @@ const async = require('async');
 const Scraper = require('./src/Scraper');
 const RequestRunner = require('./src/RequestRunner');
 const HeadlessRunner = require('./src/HeadlessRunner');
+const Config = require('./src/Config');
 
 module.exports = {
   Scraper,
   /*
    * opt = {
    *   concurrency: [Num]
+   *   minify: [Boolean] if minify the html before translating to DOM objects
    *   headless: [Boolean] if use headless chrome to get the URL
    *   onItem: [Func] callback function when an data item is emitted by a scraper
    *   onDone: [Func] callback function when there is no more scraping job running
@@ -15,6 +17,7 @@ module.exports = {
    */
   kickoff: async (url, scraper, opt = {}) => {
     const concurrency = opt.concurrency || 1;
+    Config.minifyHtml = !!opt.minify;
     const RunnerClass = opt.headless ? HeadlessRunner : RequestRunner;
     const onItem = opt.onItem || (() => {});
 

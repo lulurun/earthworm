@@ -1,5 +1,4 @@
 const puppeteer = require('puppeteer');
-const cheerio = require('cheerio');
 const ScraperRunner = require('./ScraperRunner');
 
 module.exports = class HeadlessRunner extends ScraperRunner {
@@ -11,11 +10,10 @@ module.exports = class HeadlessRunner extends ScraperRunner {
     await HeadlessRunner.browser.close();
   }
 
-  async run() {
+  async getHtml() {
     const page = await HeadlessRunner.browser.newPage();
     await page.goto(this.url);
     const html = await page.content();
-    const $ = cheerio.load(html);
-    return this.scraper.scrape($, this);
+    return html;
   }
 };

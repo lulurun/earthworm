@@ -1,5 +1,4 @@
 const rp = require('request-promise');
-const cheerio = require('cheerio');
 const ScraperRunner = require('./ScraperRunner');
 
 const UA = {
@@ -9,13 +8,12 @@ const UA = {
 };
 
 module.exports = class RequestRunner extends ScraperRunner {
-  async run() {
-    const $ = await rp.get(this.url, {
+  async getHtml() {
+    const html = await rp.get(this.url, {
       headers: {
         'User-Agent': UA.CHROME,
       },
-      transform: html => cheerio.load(html),
     });
-    return this.scraper.scrape($, this);
+    return html;
   }
 };

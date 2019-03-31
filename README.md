@@ -5,6 +5,7 @@ Kick-off-crawling is made possible by below powerful libraries
 * [`puppeteer`](https://github.com/GoogleChrome/puppeteer) for making http request getting js generated html page
 * [`cheerio`](https://github.com/cheeriojs/cheerio) for translating html text to dom objects
 * [`async`](https://github.com/caolan/async) for scheduling scraping tasks
+* [`html-minifier`](https://github.com/kangax/html-minifier) for minifying html in order to get stable scraping result
 
 # Philosophy
 
@@ -94,6 +95,7 @@ kickoff(
   new BrowseNodeScraper(),
   {
     concurrency: 2, // <-- max 2 requests at a time, default 1
+    minify: true, // <-- minify html, default true
     headless: false, // <-- set true when scraping js generated page, default false
     onItem: (item) => { // <-- the item is emitted from scraper
       console.log(item);

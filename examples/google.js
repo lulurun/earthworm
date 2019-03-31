@@ -8,6 +8,11 @@ const baseUrl = 'https://www.google.com';
 const startUrl = `${baseUrl}/search?q=${keyword}`;
 
 class SearchResultScraper extends Scraper {
+  constructor(pageNum = 0) {
+    super();
+    this.pageNum = pageNum;
+  }
+
   scrape($, emitter) {
     $('#search .g').each((i, x) => {
       const item = {
@@ -17,11 +22,11 @@ class SearchResultScraper extends Scraper {
       emitter.emitItem(item);
     });
 
-    if (emitter.getDepth() >= 2) return;
+    if (this.pageNum >= 2) return;
 
     const nextPage = $('#foot table a').last();
     const nextPageUrl = baseUrl + nextPage.attr('href');
-    emitter.emitScraper(nextPageUrl, new SearchResultScraper());
+    emitter.emitScraper(nextPageUrl, new SearchResultScraper(this.pageNum + 1));
   }
 }
 
