@@ -7,12 +7,6 @@ Kick-off-crawling is made possible by below powerful libraries
 * [`async`](https://github.com/caolan/async) for scheduling scraping tasks
 * [`html-minifier`](https://github.com/kangax/html-minifier) for minifying html in order to get stable scraping result
 
-# Philosophy
-
-* Decentralized, flat structure is beautiful and flexible.
-* All components in the system should be self-managed, it can do its own job and collaborate with other components.
-* Get things done just by `kickoff`
-
 # Overview
 
 Kick-off-crawling exposes a `Scraper` class and a `kickoff` function.
