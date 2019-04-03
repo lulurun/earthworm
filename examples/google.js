@@ -26,7 +26,7 @@ class SearchResultScraper extends Scraper {
 
     const nextPage = $('#foot table a').last();
     const nextPageUrl = baseUrl + nextPage.attr('href');
-    emitter.emitScraper(nextPageUrl, new SearchResultScraper(this.pageNum + 1));
+    emitter.emitJob(nextPageUrl, new SearchResultScraper(this.pageNum + 1));
   }
 }
 

@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
-const ScraperRunner = require('./ScraperRunner');
+const ScrapingJobRunner = require('./ScrapingJobRunner');
 
-module.exports = class HeadlessRunner extends ScraperRunner {
+module.exports = class HeadlessRunner extends ScrapingJobRunner {
   static async init() {
     HeadlessRunner.browser = await puppeteer.launch();
   }

@@ -18,7 +18,7 @@ module.exports = {
   kickoff: async (url, scraper, opt = {}) => {
     const concurrency = opt.concurrency || 1;
     Config.minifyHtml = !!opt.minify;
-    const RunnerClass = opt.headless ? HeadlessRunner : RequestRunner;
+    const JobRunnerClass = opt.headless ? HeadlessRunner : RequestRunner;
     const onItem = opt.onItem || (() => {});
 
     const q = async.queue(async runner => runner.run(), concurrency);
@@ -27,16 +27,16 @@ module.exports = {
       if (opt.headless) HeadlessRunner.close();
     };
 
-    const start = (runner) => {
-      runner.on('item', item => onItem(item, runner));
-      runner.on('runner', child => start(child));
-      q.push(runner);
+    const kick = (jobRunner) => {
+      jobRunner.on('item', newItem => onItem(newItem, jobRunner));
+      jobRunner.on('job', newJobRunner => kick(newJobRunner));
+      q.push(jobRunner);
     };
 
     if (opt.headless) {
       await HeadlessRunner.init();
     }
-    const runner = new RunnerClass(url, scraper);
-    start(runner);
+    const firstJobRunner = new JobRunnerClass(url, scraper);
+    kick(firstJobRunner);
   },
 };

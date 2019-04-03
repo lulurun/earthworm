@@ -1,4 +1,5 @@
-Kick-off-crawling is trying to make web scraping easy.
+Kick-off-crawling
+provides simple API/structure for developers to create scrapers and connect those scrapers together to achieve complicated data mining jobs.
 
 Kick-off-crawling is made possible by below powerful libraries
 * [`request`](https://github.com/request/request), [`request-promise`](https://github.com/request/request-promise) for http request
@@ -16,7 +17,8 @@ Kick-off-crawling exposes a `Scraper` class and a `kickoff` function.
 * post the data to developer defined function
 * pass the url to next scraper
 
-`kickoff` takes start url and scraper, kickoff the crawling process and wait until the work is done.
+`kickoff` takes a url and a scraper, kicks off the crawling process.
+During the crawling process, new scrapers (scraping job) will be generated and scheduled by `kickoff` function. The crawling process stops when there is no more scraping job.
 
 # Qucik start & Running the Examples
 

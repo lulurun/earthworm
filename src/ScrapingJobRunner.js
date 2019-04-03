@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 const { minify } = require('html-minifier');
 const Config = require('./Config');
 
-module.exports = class ScraperRunner extends EventEmitter {
+module.exports = class ScrapingJobRunner extends EventEmitter {
   constructor(url, scraper) {
     super();
     this.url = url;
@@ -28,8 +28,8 @@ module.exports = class ScraperRunner extends EventEmitter {
     this.emit('item', item, this);
   }
 
-  emitScraper(url, scraper) {
-    const runner = new this.constructor(url, scraper, this);
-    this.emit('runner', runner);
+  emitJob(url, scraper) {
+    const jobRunner = new this.constructor(url, scraper, this);
+    this.emit('job', jobRunner);
   }
 };

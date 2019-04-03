@@ -30,7 +30,7 @@ class BrowseNodeScraper extends Scraper {
   scrape($, emitter) {
     $('#mainResults .s-item-container').slice(0, 5).each((i, x) => {
       const detailPageUrl = $(x).find('.s-access-detail-page').attr('href');
-      emitter.emitScraper(detailPageUrl, new DetailPageScraper());
+      emitter.emitJob(detailPageUrl, new DetailPageScraper());
     });
   }
 }
