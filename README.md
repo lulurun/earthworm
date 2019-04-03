@@ -13,7 +13,7 @@ Kick-off-crawling is made possible by below powerful libraries
 Kick-off-crawling exposes a `Scraper` class and a `kickoff` function.
 
 `Scraper`s are self-managed:
-* scrape data and urls from a given url
+* scrape data and urls from a DOM object parsed by cheerio.
 * post the data to developer defined function
 * pass the url to next scraper
 
@@ -26,8 +26,8 @@ During the crawling process, new scrapers (scraping job) will be generated and s
 $ cd ${REPO_PATH}
 $ npm install
 $ cd examples
-$ node google.js
-$ node amazon.js
+$ node google.js # getting top 30 search results
+$ node amazon.js # getting top 5 apps from Amazon Appstore
 ```
 
 # Usage
@@ -49,7 +49,7 @@ class BrowseNodeScraper extends Scraper {
   scrape($, emitter) {
     $('#mainResults .s-item-container').slice(0, 5).each((i, x) => {
       const detailPageUrl = $(x).find('.s-access-detail-page').attr('href');
-      emitter.emitScraper(detailPageUrl, new DetailPageScraper()); // <-- pass scraping job of DetailPage to DetailPageScraper
+      emitter.emitJob(detailPageUrl, new DetailPageScraper()); // <-- New scraping job
     });
   }
 }

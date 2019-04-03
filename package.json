@@ -1,6 +1,6 @@
 {
   "name": "kick-off-crawling",
-  "version": "2.1.1",
+  "version": "2.2.1",
   "description": "make web scraping easy",
   "main": "index.js",
   "scripts": {
